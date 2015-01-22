@@ -1,4 +1,4 @@
-package co.com.vision.prueba.rest;
+package co.com.vision.prueba.controllers;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

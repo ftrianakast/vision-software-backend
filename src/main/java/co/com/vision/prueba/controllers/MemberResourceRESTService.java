@@ -1,4 +1,4 @@
-package co.com.vision.prueba.rest;
+package co.com.vision.prueba.controllers;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 
-import co.com.vision.prueba.model.Member;
+import co.com.vision.prueba.domain.Member;
 
 /**
  * JAX-RS Example

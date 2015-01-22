@@ -1,4 +1,4 @@
-package co.com.vision.prueba.model;
+package co.com.vision.prueba.domain;
 
 import java.io.Serializable;
 

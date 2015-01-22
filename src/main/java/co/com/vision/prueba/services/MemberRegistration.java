@@ -1,4 +1,4 @@
-package co.com.vision.prueba.controller;
+package co.com.vision.prueba.services;
 
 import java.util.logging.Logger;
 
@@ -11,7 +11,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.persistence.EntityManager;
 
-import co.com.vision.prueba.model.Member;
+import co.com.vision.prueba.domain.Member;
 
 // The @Stateful annotation eliminates the need for manual transaction demarcation
 @Stateful

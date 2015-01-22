@@ -15,8 +15,8 @@ import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import co.com.vision.prueba.controller.MemberRegistration;
-import co.com.vision.prueba.model.Member;
+import co.com.vision.prueba.domain.Member;
+import co.com.vision.prueba.services.MemberRegistration;
 import co.com.vision.prueba.util.Resources;
 
 @RunWith(Arquillian.class)
