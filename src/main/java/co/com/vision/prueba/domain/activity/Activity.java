@@ -1,6 +1,7 @@
 package co.com.vision.prueba.domain.activity;
 
 import co.com.vision.prueba.domain.Node;
+import co.com.vision.prueba.domain.NodeType;
 
 /**
  * @author ftrianakast
@@ -18,22 +19,12 @@ public class Activity extends Node {
 	 * @param description
 	 * @param activityType
 	 */
-	public Activity(String id, String name, String description,
+	public Activity(String id, String name, String description, 
 			ActivityType activityType) {
-		super(id, name, description);
+		super(id, name, description, NodeType.ACTIVITY);
 		this.activityType = activityType;
 	}
 
-	/**
-	 * Basic constructor
-	 * 
-	 * @param id
-	 * @param name
-	 * @param description
-	 */
-	public Activity(String id, String name, String description) {
-		super(id, name, description);
-	}
 
 	public ActivityType getActivityType() {
 		return activityType;

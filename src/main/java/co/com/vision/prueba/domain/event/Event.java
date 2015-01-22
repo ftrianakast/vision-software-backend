@@ -1,6 +1,9 @@
 package co.com.vision.prueba.domain.event;
 
+import java.util.Optional;
+
 import co.com.vision.prueba.domain.Node;
+import co.com.vision.prueba.domain.NodeType;
 
 /**
  * 
@@ -13,20 +16,24 @@ public class Event extends Node {
 
 	private EventSpecificType specificType;
 
+	private Optional<String> catchThrow;
+
 	/**
-	 * Default constructor
 	 * 
 	 * @param id
 	 * @param name
 	 * @param description
 	 * @param generalType
 	 * @param specificType
+	 * @param catchThrow
 	 */
 	public Event(String id, String name, String description,
-			EventGeneralType generalType, EventSpecificType specificType) {
-		super(id, name, description);
+			EventGeneralType generalType, EventSpecificType specificType,
+			Optional<String> catchThrow) {
+		super(id, name, description, NodeType.EVENT);
 		this.generalType = generalType;
 		this.specificType = specificType;
+		this.catchThrow = catchThrow;
 	}
 
 	public EventGeneralType getGeneralType() {
@@ -43,5 +50,13 @@ public class Event extends Node {
 
 	public void setSpecificType(EventSpecificType specificType) {
 		this.specificType = specificType;
+	}
+
+	public Optional<String> getCatchThrow() {
+		return catchThrow;
+	}
+
+	public void setCatchThrow(Optional<String> catchThrow) {
+		this.catchThrow = catchThrow;
 	}
 }

@@ -1,4 +1,4 @@
-package co.com.vision.prueba.services;
+package co.com.vision.prueba.services.rules;
 
 import java.util.List;
 import java.util.Optional;
@@ -6,12 +6,14 @@ import java.util.stream.Collectors;
 
 import co.com.vision.prueba.domain.Node;
 import co.com.vision.prueba.domain.Transition;
+import co.com.vision.prueba.domain.ValidationRule;
 import co.com.vision.prueba.domain.WorkflowProcess;
 import co.com.vision.prueba.domain.activity.Activity;
 import co.com.vision.prueba.domain.activity.ActivityType;
 import co.com.vision.prueba.domain.aux.ValidationErrorMessage;
 import co.com.vision.prueba.domain.event.Event;
 import co.com.vision.prueba.domain.event.EventGeneralType;
+import co.com.vision.prueba.services.ErrorMessageGenerator;
 
 /**
  * BPMN 0102: All flow objects other than end events and compensating activities
@@ -21,15 +23,16 @@ import co.com.vision.prueba.domain.event.EventGeneralType;
  * @author Felipe Triana
  * @version 1.0
  */
-public class ValidationRule_BPMN_102 implements ValidationRule {
+public class RuleValidator_BPMN_102 implements RuleValidator {
+
+	private static ValidationRule validationRule = new ValidationRule(
+			"BPMN_0102",
+			"All flow objects other than end events and compensating activities must have an outgoing sequence flow, if the process level includes any start or end events.");
 
 	@Override
 	public Optional<ValidationErrorMessage> validate(WorkflowProcess process) {
-		List<Event> events = process.getEvents();
-		List<Activity> activities = process.getActivities();
-		ValidationErrorMessage validationMessage = new ValidationErrorMessage(
-				"The rule BPMN_102 was validated for the process: "
-						+ process.getName());
+		List<Node> events = process.getEvents();
+		List<Node> activities = process.getActivities();
 
 		if (includesProcessStartOrEndEvents(process.getEvents())) {
 			List<Node> candidateEvents = excludeEventByEventType(events,
@@ -38,13 +41,19 @@ public class ValidationRule_BPMN_102 implements ValidationRule {
 					activities, ActivityType.COMPENSATING_ACTIVITY);
 			List<Transition> transitions = process.getTransitions();
 
-			if (!hasNodesOutgoingFlow(candidateActivities, transitions)
-					&& !hasNodesOutgoingFlow(candidateEvents, transitions)) {
-				validationMessage = new ValidationErrorMessage("Error "
-						+ process.getName());
-			}
+			List<Node> erroneousActivities = getNodesWithoutOutgoingFlow(
+					candidateActivities, transitions);
+			List<Node> erroneousEvents = getNodesWithoutOutgoingFlow(
+					candidateEvents, transitions);
+
+			erroneousActivities.addAll(erroneousEvents);
+
+			return Optional.of(ErrorMessageGenerator.generateErrorMessage(
+					erroneousActivities, validationRule));
+		} else {
+			return Optional.empty();
 		}
-		return Optional.empty();
+
 	}
 
 	/**
@@ -52,11 +61,13 @@ public class ValidationRule_BPMN_102 implements ValidationRule {
 	 * @param events
 	 * @return
 	 */
-	public boolean includesProcessStartOrEndEvents(List<Event> events) {
+	public boolean includesProcessStartOrEndEvents(List<Node> events) {
 		boolean includesStartEventCondition = events.stream().anyMatch(
-				event -> event.getGeneralType().equals(EventGeneralType.START));
+				event -> ((Event) event).getGeneralType().equals(
+						EventGeneralType.START));
 		boolean includesEndEventCondition = events.stream().anyMatch(
-				event -> event.getGeneralType().equals(EventGeneralType.END));
+				event -> ((Event) event).getGeneralType().equals(
+						EventGeneralType.END));
 		return includesEndEventCondition || includesStartEventCondition;
 	}
 
@@ -66,12 +77,12 @@ public class ValidationRule_BPMN_102 implements ValidationRule {
 	 * @param activityType
 	 * @return
 	 */
-	private List<Node> excludeActivitiesByActivityType(
-			List<Activity> activities, ActivityType activityType) {
+	private List<Node> excludeActivitiesByActivityType(List<Node> activities,
+			ActivityType activityType) {
 		List<Node> candidateActivites = activities
 				.stream()
-				.filter(activity -> !activity.getActivityType().equals(
-						activityType)).collect(Collectors.toList());
+				.filter(activity -> !((Activity) activity).getActivityType()
+						.equals(activityType)).collect(Collectors.toList());
 		return candidateActivites;
 	}
 
@@ -81,11 +92,12 @@ public class ValidationRule_BPMN_102 implements ValidationRule {
 	 * @param evenType
 	 * @return
 	 */
-	private List<Node> excludeEventByEventType(List<Event> events,
+	private List<Node> excludeEventByEventType(List<Node> events,
 			EventGeneralType evenType) {
-		List<Node> candidateEvents = events.stream()
-				.filter(event -> event.getGeneralType().equals(evenType))
-				.collect(Collectors.toList());
+		List<Node> candidateEvents = events
+				.stream()
+				.filter(event -> ((Event) event).getGeneralType().equals(
+						evenType)).collect(Collectors.toList());
 
 		return candidateEvents;
 	}
@@ -96,10 +108,11 @@ public class ValidationRule_BPMN_102 implements ValidationRule {
 	 * @param transitions
 	 * @return
 	 */
-	private boolean hasNodesOutgoingFlow(List<Node> nodes,
+	private List<Node> getNodesWithoutOutgoingFlow(List<Node> nodes,
 			List<Transition> transitions) {
-		return nodes.stream().allMatch(
-				node -> hasNodeOutgoingTransition(node, transitions));
+		return nodes.stream()
+				.filter(node -> hasNodeOutgoingTransition(node, transitions))
+				.collect(Collectors.toList());
 	}
 
 	/**

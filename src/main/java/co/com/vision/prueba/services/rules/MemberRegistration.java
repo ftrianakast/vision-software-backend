@@ -1,4 +1,4 @@
-package co.com.vision.prueba.services;
+package co.com.vision.prueba.services.rules;
 
 import java.util.logging.Logger;
 

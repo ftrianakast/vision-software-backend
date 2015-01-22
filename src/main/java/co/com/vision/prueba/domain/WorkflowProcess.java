@@ -2,9 +2,6 @@ package co.com.vision.prueba.domain;
 
 import java.util.List;
 
-import co.com.vision.prueba.domain.activity.Activity;
-import co.com.vision.prueba.domain.event.Event;
-
 /**
  * 
  * @author Felipe Triana <ftrianakast@gmail.com>
@@ -16,9 +13,9 @@ public class WorkflowProcess {
 
 	private String description;
 
-	private List<Activity> activities;
+	private List<Node> activities;
 
-	private List<Event> events;
+	private List<Node> events;
 
 	private List<Transition> transitions;
 
@@ -41,7 +38,7 @@ public class WorkflowProcess {
 	 * @param countryKey
 	 */
 	public WorkflowProcess(String name, String description,
-			List<Activity> activities, List<Event> events,
+			List<Node> activities, List<Node> events,
 			List<Transition> transitions, String author, String version,
 			String countryKey) {
 		super();
@@ -71,11 +68,11 @@ public class WorkflowProcess {
 		this.description = description;
 	}
 
-	public List<Activity> getActivities() {
+	public List<Node> getActivities() {
 		return activities;
 	}
 
-	public void setActivities(List<Activity> activities) {
+	public void setActivities(List<Node> activities) {
 		this.activities = activities;
 	}
 
@@ -111,11 +108,11 @@ public class WorkflowProcess {
 		this.countryKey = countryKey;
 	}
 
-	public List<Event> getEvents() {
+	public List<Node> getEvents() {
 		return events;
 	}
 
-	public void setEvents(List<Event> events) {
+	public void setEvents(List<Node> events) {
 		this.events = events;
 	}
 }

@@ -1,12 +1,15 @@
-package co.com.vision.prueba.services;
+package co.com.vision.prueba.services.rules;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import co.com.vision.prueba.domain.Node;
+import co.com.vision.prueba.domain.ValidationRule;
 import co.com.vision.prueba.domain.WorkflowProcess;
 import co.com.vision.prueba.domain.activity.Activity;
 import co.com.vision.prueba.domain.aux.ValidationErrorMessage;
+import co.com.vision.prueba.services.ErrorMessageGenerator;
 
 /**
  * 
@@ -16,25 +19,24 @@ import co.com.vision.prueba.domain.aux.ValidationErrorMessage;
  * @author Felipe Triana
  * @version 1.0
  */
-public class ValidationRule_Style_104 implements ValidationRule {
+public class RuleValidator_Style_104 implements RuleValidator {
+
+	private static ValidationRule validationRule = new ValidationRule(
+			"Style_0104",
+			"Two activities in the same process should not have the same name.");
+
 	@Override
 	public Optional<ValidationErrorMessage> validate(WorkflowProcess process) {
-		List<Activity> activities = process.getActivities();
-		List<Activity> repeatedActivities = findRepeatedNamedActivities(activities);
-		ValidationErrorMessage validationMessage = null;
+		List<Node> activities = process.getActivities();
+		List<Node> repeatedActivities = findRepeatedNamedActivities(activities);
 
 		if (repeatedActivities.size() == 0) {
-			validationMessage = new ValidationErrorMessage(
-					"The rule Style_104 was validated for process :"
-							+ process.getName());
+			return Optional.empty();
 		} else {
-			Activity firstRepeatedActivity = repeatedActivities.get(0);
-			new ValidationErrorMessage(
-					firstRepeatedActivity.getId(),
-					"It was found at least one activity with the same name than other",
-					firstRepeatedActivity.getName());
+			return Optional.of(ErrorMessageGenerator.generateErrorMessage(
+					repeatedActivities, validationRule));
 		}
-		return Optional.empty();
+
 	}
 
 	/**
@@ -43,13 +45,13 @@ public class ValidationRule_Style_104 implements ValidationRule {
 	 * @param activities
 	 * @return
 	 */
-	private List<Activity> findRepeatedNamedActivities(List<Activity> activities) {
-		List<Activity> repeatedActivities = new ArrayList<Activity>();
+	private List<Node> findRepeatedNamedActivities(List<Node> activities) {
+		List<Node> repeatedActivities = new ArrayList<Node>();
 		for (int i = 0; i < activities.size(); i++) {
-			Activity someActivity = activities.get(i);
+			Activity someActivity = (Activity) activities.get(i);
 			boolean reapeatedActivityFinded = false;
 			for (int j = i + 1; i < activities.size(); i++) {
-				Activity otherActivity = activities.get(j);
+				Activity otherActivity = (Activity) activities.get(j);
 				if (someActivity.getName().equals(otherActivity.getName())) {
 					reapeatedActivityFinded = true;
 				}
@@ -60,4 +62,5 @@ public class ValidationRule_Style_104 implements ValidationRule {
 		}
 		return repeatedActivities;
 	}
+
 }

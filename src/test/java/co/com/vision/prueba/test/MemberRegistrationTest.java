@@ -16,7 +16,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import co.com.vision.prueba.domain.Member;
-import co.com.vision.prueba.services.MemberRegistration;
+import co.com.vision.prueba.services.rules.MemberRegistration;
 import co.com.vision.prueba.util.Resources;
 
 @RunWith(Arquillian.class)

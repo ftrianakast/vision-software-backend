@@ -1,43 +1,23 @@
 package co.com.vision.prueba.domain;
 
-
 /**
  * 
- * @author ftrianakast
+ * @author Felipe Triana
  * @version 1.0
  */
-public abstract class Node {
-
-	private String id;
-
+public class ValidationRule {
 	private String name;
-
 	private String description;
 
-	private NodeType type;
-	
-
 	/**
-	 * 
-	 * @param id
+	 * Default Constructor 
 	 * @param name
 	 * @param description
-	 * @param type
 	 */
-	public Node(String id, String name, String description, NodeType type) {
+	public ValidationRule(String name, String description) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.description = description;
-		this.type = type;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -54,13 +34,5 @@ public abstract class Node {
 
 	public void setDescription(String description) {
 		this.description = description;
-	}
-
-	public NodeType getType() {
-		return type;
-	}
-
-	public void setType(NodeType type) {
-		this.type = type;
 	}
 }

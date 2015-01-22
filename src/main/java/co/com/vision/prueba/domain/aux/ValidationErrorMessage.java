@@ -1,5 +1,7 @@
 package co.com.vision.prueba.domain.aux;
 
+import java.util.List;
+
 /**
  * 
  * @author Felipe Triana
@@ -7,53 +9,26 @@ package co.com.vision.prueba.domain.aux;
  */
 public class ValidationErrorMessage {
 
-	private String elementId;
-
-	private String message;
-
-	private String elementName;
+	private List<SpecificErrorMessage> specificErrorMessages;
 
 	/**
+	 * Default constructor
 	 * 
-	 * @param elementId
-	 * @param message
-	 * @param elementName
+	 * @param specificErrorMessages
 	 */
-	public ValidationErrorMessage(String elementId, String message,
-			String elementName) {
+	public ValidationErrorMessage(
+			List<SpecificErrorMessage> specificErrorMessages) {
 		super();
-		this.elementId = elementId;
-		this.message = message;
-		this.elementName = elementName;
+		this.specificErrorMessages = specificErrorMessages;
 	}
 
-	public ValidationErrorMessage(String message) {
-		super();
-		this.message = message;
+	public List<SpecificErrorMessage> getSpecificErrorMessages() {
+		return specificErrorMessages;
 	}
 
-	public String getElementId() {
-		return elementId;
-	}
-
-	public void setElementId(String elementId) {
-		this.elementId = elementId;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
-
-	public String getElementName() {
-		return elementName;
-	}
-
-	public void setElementName(String elementName) {
-		this.elementName = elementName;
+	public void setSpecificErrorMessages(
+			List<SpecificErrorMessage> specificErrorMessages) {
+		this.specificErrorMessages = specificErrorMessages;
 	}
 
 }

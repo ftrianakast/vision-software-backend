@@ -1,11 +1,11 @@
-package co.com.vision.prueba.services;
+package co.com.vision.prueba.services.rules;
 
 import java.util.Optional;
 
 import co.com.vision.prueba.domain.WorkflowProcess;
 import co.com.vision.prueba.domain.aux.ValidationErrorMessage;
 
-public interface ValidationRule {
+public interface RuleValidator {
 
 	/**
 	 * Validates if a bizagi process is valid according to some existing rules
@@ -14,4 +14,6 @@ public interface ValidationRule {
 	 */
 	public Optional<ValidationErrorMessage> validate(WorkflowProcess process);
 
+	
+	
 }
