@@ -9,6 +9,8 @@ import java.util.List;
  */
 public class WorkflowProcess {
 
+	private String id;
+	
 	private String name;
 
 	private String description;
@@ -25,9 +27,10 @@ public class WorkflowProcess {
 
 	private String countryKey;
 
+	
 	/**
-	 * WorkflowProcess
 	 * 
+	 * @param id
 	 * @param name
 	 * @param description
 	 * @param activities
@@ -37,11 +40,12 @@ public class WorkflowProcess {
 	 * @param version
 	 * @param countryKey
 	 */
-	public WorkflowProcess(String name, String description,
+	public WorkflowProcess(String id, String name, String description,
 			List<Node> activities, List<Node> events,
 			List<Transition> transitions, String author, String version,
 			String countryKey) {
 		super();
+		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.activities = activities;
@@ -50,6 +54,10 @@ public class WorkflowProcess {
 		this.author = author;
 		this.version = version;
 		this.countryKey = countryKey;
+	}
+
+	public WorkflowProcess() {
+
 	}
 
 	public String getName() {
@@ -115,4 +123,13 @@ public class WorkflowProcess {
 	public void setEvents(List<Node> events) {
 		this.events = events;
 	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+	
 }

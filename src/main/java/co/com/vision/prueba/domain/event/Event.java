@@ -14,7 +14,7 @@ public class Event extends Node {
 
 	private EventGeneralType generalType;
 
-	private EventSpecificType specificType;
+	private Optional<EventSpecificType> specificType;
 
 	private Optional<String> catchThrow;
 
@@ -28,7 +28,7 @@ public class Event extends Node {
 	 * @param catchThrow
 	 */
 	public Event(String id, String name, String description,
-			EventGeneralType generalType, EventSpecificType specificType,
+			EventGeneralType generalType, Optional<EventSpecificType> specificType,
 			Optional<String> catchThrow) {
 		super(id, name, description, NodeType.EVENT);
 		this.generalType = generalType;
@@ -44,11 +44,11 @@ public class Event extends Node {
 		this.generalType = generalType;
 	}
 
-	public EventSpecificType getSpecificType() {
+	public Optional<EventSpecificType> getSpecificType() {
 		return specificType;
 	}
 
-	public void setSpecificType(EventSpecificType specificType) {
+	public void setSpecificType(Optional<EventSpecificType> specificType) {
 		this.specificType = specificType;
 	}
 

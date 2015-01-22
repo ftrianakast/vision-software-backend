@@ -1,5 +1,7 @@
 package co.com.vision.prueba.domain.activity;
 
+import java.util.Optional;
+
 import co.com.vision.prueba.domain.Node;
 import co.com.vision.prueba.domain.NodeType;
 
@@ -9,7 +11,7 @@ import co.com.vision.prueba.domain.NodeType;
  */
 public class Activity extends Node {
 
-	private ActivityType activityType;
+	private Optional<ActivityType> activityType;
 
 	/**
 	 * Default constructor
@@ -19,18 +21,17 @@ public class Activity extends Node {
 	 * @param description
 	 * @param activityType
 	 */
-	public Activity(String id, String name, String description, 
-			ActivityType activityType) {
+	public Activity(String id, String name, String description,
+			Optional<ActivityType> activityType) {
 		super(id, name, description, NodeType.ACTIVITY);
 		this.activityType = activityType;
 	}
 
-
-	public ActivityType getActivityType() {
+	public Optional<ActivityType> getActivityType() {
 		return activityType;
 	}
 
-	public void setActivityType(ActivityType activityType) {
+	public void setActivityType(Optional<ActivityType> activityType) {
 		this.activityType = activityType;
 	}
 }
