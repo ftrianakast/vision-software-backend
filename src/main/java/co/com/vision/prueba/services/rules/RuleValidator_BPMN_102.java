@@ -36,7 +36,7 @@ public class RuleValidator_BPMN_102 implements RuleValidator {
 
 		if (includesProcessStartOrEndEvents(process.getEvents())) {
 			List<Node> candidateEvents = excludeEventByEventType(events,
-					EventGeneralType.END);
+					EventGeneralType.EndEvent);
 			List<Node> candidateActivities = excludeActivitiesByActivityType(
 					activities, ActivityType.COMPENSATING_ACTIVITY);
 			List<Transition> transitions = process.getTransitions();
@@ -64,10 +64,10 @@ public class RuleValidator_BPMN_102 implements RuleValidator {
 	public boolean includesProcessStartOrEndEvents(List<Node> events) {
 		boolean includesStartEventCondition = events.stream().anyMatch(
 				event -> ((Event) event).getGeneralType().equals(
-						EventGeneralType.START));
+						EventGeneralType.StartEvent));
 		boolean includesEndEventCondition = events.stream().anyMatch(
 				event -> ((Event) event).getGeneralType().equals(
-						EventGeneralType.END));
+						EventGeneralType.EndEvent));
 		return includesEndEventCondition || includesStartEventCondition;
 	}
 

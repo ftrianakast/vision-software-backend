@@ -69,8 +69,8 @@ public class RuleValidator_Style_123 implements RuleValidator {
 	private boolean isAMessageEvent(Node node) {
 		return node.getType().equals(NodeType.EVENT)
 				&& ((Event) node).getGeneralType().equals(
-						EventGeneralType.INTERMEDIATE)
+						EventGeneralType.IntermediateEvent)
 				&& ((Event) node).getSpecificType().equals(
-						EventSpecificType.MESSAGE_EVENT);
+						EventSpecificType.Message);
 	}
 }

@@ -46,7 +46,7 @@ public class RuleValidator_Style_115 implements RuleValidator {
 				.stream()
 				.filter(event -> event.getName().equals("")
 						&& ((Event) event).getGeneralType().equals(
-								EventGeneralType.INTERMEDIATE))
+								EventGeneralType.IntermediateEvent))
 				.collect(Collectors.toList());
 
 		return eventsNotLabeled;
