@@ -25,7 +25,8 @@ public class RuleValidator_Style_115 implements RuleValidator {
 			"Style_115", "A throwing intermediate event should be labeled.");
 
 	@Override
-	public Optional<ValidationErrorMessage> validate(WorkflowProcess process) {
+	public Optional<ValidationErrorMessage> validateWorkflowProcess(
+			WorkflowProcess process) {
 		List<Node> events = process.getEvents();
 		List<Node> eventsNotLabeled = getIntermediateEventsNotLabeled(events);
 

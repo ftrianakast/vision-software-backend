@@ -28,7 +28,7 @@ public class RuleValidator_Style_122 implements RuleValidator {
 			"A catching Message event should have incoming message flow.");
 
 	@Override
-	public Optional<ValidationErrorMessage> validate(WorkflowProcess process) {
+	public Optional<ValidationErrorMessage> validateWorkflowProcess(WorkflowProcess process) {
 		List<Node> erroneousNodes = getCatchingEventMessageWithoutIncomingMessage(process
 				.getTransitions());
 

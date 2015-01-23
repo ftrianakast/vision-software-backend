@@ -91,7 +91,6 @@ public class EventParser {
 					.get();
 			Optional<String> catchthrow = Optional
 					.of(triggerResultMessageElement.getAttribute("CatchThrow"));
-
 			Event event = new Event(id, name, "", eventType,
 					Optional.of(eventSpecificType), catchthrow);
 			newEvent = Optional.of(event);

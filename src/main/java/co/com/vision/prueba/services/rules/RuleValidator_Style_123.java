@@ -28,7 +28,8 @@ public class RuleValidator_Style_123 implements RuleValidator {
 			"A throwing Message event should have outgoing message flow");
 
 	@Override
-	public Optional<ValidationErrorMessage> validate(WorkflowProcess process) {
+	public Optional<ValidationErrorMessage> validateWorkflowProcess(
+			WorkflowProcess process) {
 
 		List<Node> erroneousNodes = getThrowingMessageEventsWithoutOutgoingMessage(process
 				.getTransitions());

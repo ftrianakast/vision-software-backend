@@ -29,8 +29,13 @@ public class RuleValidator_BPMN_102 implements RuleValidator {
 			"BPMN_0102",
 			"All flow objects other than end events and compensating activities must have an outgoing sequence flow, if the process level includes any start or end events.");
 
-	@Override
-	public Optional<ValidationErrorMessage> validate(WorkflowProcess process) {
+	/**
+	 * 
+	 * @param process
+	 * @return
+	 */
+	public Optional<ValidationErrorMessage> validateWorkflowProcess(
+			WorkflowProcess process) {
 		List<Node> events = process.getEvents();
 		List<Node> activities = process.getActivities();
 
