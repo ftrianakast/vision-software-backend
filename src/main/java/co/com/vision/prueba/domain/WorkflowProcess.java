@@ -10,7 +10,7 @@ import java.util.List;
 public class WorkflowProcess {
 
 	private String id;
-	
+
 	private String name;
 
 	private String description;
@@ -27,7 +27,6 @@ public class WorkflowProcess {
 
 	private String countryKey;
 
-	
 	/**
 	 * 
 	 * @param id
@@ -58,6 +57,18 @@ public class WorkflowProcess {
 
 	public WorkflowProcess() {
 
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public List<Node> getNodes() {
+		List<Node> oldActivities = getActivities();
+		getActivities().addAll(getEvents());
+		List<Node> completeNodes = getActivities();
+		setActivities(oldActivities);
+		return completeNodes;
 	}
 
 	public String getName() {
@@ -131,5 +142,5 @@ public class WorkflowProcess {
 	public void setId(String id) {
 		this.id = id;
 	}
-	
+
 }

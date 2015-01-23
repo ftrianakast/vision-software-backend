@@ -11,27 +11,29 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import co.com.vision.prueba.domain.Process;
+import co.com.vision.prueba.domain.Transition;
 import co.com.vision.prueba.domain.WorkflowProcess;
 
 public class ProcessParserImpl implements ProcessParser {
 
 	@Override
 	public Optional<Process> parseProcess(byte[] document) {
-		// TODO Auto-generated method stub
 		Optional<Document> xmlDocument = getReadXMLObject(document);
 		if (xmlDocument.isPresent()) {
 			List<WorkflowProcess> workflowProcesses = parseWorkflowProcesses(xmlDocument
 					.get());
-			
-			
+			NodeList messageFlowsNodeList = xmlDocument.get()
+					.getElementsByTagName("MessageFlow");
+			List<Transition> messageFlows = MessageFlowParser
+					.parseMessageFlows(messageFlowsNodeList, workflowProcesses);
+			return Optional.of(new Process(workflowProcesses, messageFlows));
 		} else {
 			return Optional.empty();
 		}
-
-		return null;
 	}
 
 	/**
