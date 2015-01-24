@@ -20,7 +20,7 @@ public interface RuleValidator {
 	 * 
 	 * @return
 	 */
-	default Optional<List<ValidationErrorMessage>> validate(Process process) {
+	public default Optional<List<ValidationErrorMessage>> validate(Process process) {
 		List<ValidationErrorMessage> validationErrorMessages = process
 				.getWorkFlowProcesses()
 				.stream()

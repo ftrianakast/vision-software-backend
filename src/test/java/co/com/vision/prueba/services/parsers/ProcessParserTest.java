@@ -83,7 +83,7 @@ public class ProcessParserTest extends TestCase {
 		Assert.assertEquals("Main Process", workflowProcess01.getName());
 		Assert.assertEquals("P4", workflowProcess02.getName());
 		Assert.assertEquals("P5", workflowProcess03.getName());
-		Assert.assertEquals(true, testMessageFlows(process.getMessageFlows()));
+		Assert.assertEquals(true, testMessageFlows(process.getMessageFlows().get()));
 		Assert.assertEquals(true, testActivity(workflowProcess03
 				.getActivities().get()));
 		Assert.assertEquals(true, testEvents(workflowProcess02.getEvents()
@@ -127,6 +127,7 @@ public class ProcessParserTest extends TestCase {
 	 * @param list
 	 */
 	private boolean testEvents(List<Node> events) {
+		System.out.println("------------------------------------------------");
 		events.stream().forEach(event -> System.out.println(event.getName()));
 		Event eventB = (Event) events.stream()
 				.filter(event -> event.getName().equals("B")).findFirst().get();

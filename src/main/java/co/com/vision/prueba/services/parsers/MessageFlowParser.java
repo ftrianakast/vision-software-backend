@@ -2,6 +2,7 @@ package co.com.vision.prueba.services.parsers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -18,7 +19,7 @@ public class MessageFlowParser {
 	 * @param workflowProcesses
 	 * @return
 	 */
-	public static List<Transition> parseMessageFlows(
+	public static Optional<List<Transition>> parseMessageFlows(
 			NodeList messageFlowsNodes, List<WorkflowProcess> workflowProcesses) {
 		List<Transition> messageFlows = new ArrayList<Transition>();
 		for (int i = 0; i < messageFlowsNodes.getLength(); i++) {
@@ -32,7 +33,7 @@ public class MessageFlowParser {
 			messageFlows.add(new Transition(name, sourceNode, targetNode));
 		}
 
-		return messageFlows;
+		return Optional.of(messageFlows);
 
 	}
 

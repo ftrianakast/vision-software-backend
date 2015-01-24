@@ -1,18 +1,17 @@
 package co.com.vision.prueba.services.rules;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import co.com.vision.prueba.domain.Node;
-import co.com.vision.prueba.domain.NodeType;
+import co.com.vision.prueba.domain.Process;
 import co.com.vision.prueba.domain.Transition;
 import co.com.vision.prueba.domain.ValidationRule;
 import co.com.vision.prueba.domain.WorkflowProcess;
 import co.com.vision.prueba.domain.aux.ValidationErrorMessage;
 import co.com.vision.prueba.domain.event.Event;
-import co.com.vision.prueba.domain.event.EventGeneralType;
-import co.com.vision.prueba.domain.event.EventSpecificType;
 import co.com.vision.prueba.services.ErrorMessageGenerator;
 
 /**
@@ -28,51 +27,99 @@ public class RuleValidator_Style_122 implements RuleValidator {
 			"A catching Message event should have incoming message flow.");
 
 	@Override
-	public Optional<ValidationErrorMessage> validateWorkflowProcess(WorkflowProcess process) {
-		List<Node> erroneousNodes = getCatchingEventMessageWithoutIncomingMessage(process
-				.getTransitions());
+	public Optional<List<ValidationErrorMessage>> validate(Process process) {
+		List<WorkflowProcess> workflowProcesses = process
+				.getWorkFlowProcesses().stream()
+				.filter(ep -> ep.getEvents().isPresent())
+				.collect(Collectors.toList());
+		if (process.getMessageFlows().isPresent()) {
+			List<Node> catchingMessageEvents = getCatchingMessageEvents(workflowProcesses);
 
-		if (erroneousNodes.isEmpty()) {
-			return Optional.empty();
+			List<Node> catchingMessageEventsWithoutIncomingFlow = getCatchingEventsWithoutIncomingFlow(
+					catchingMessageEvents, process.getMessageFlows().get());
+
+			List<ValidationErrorMessage> validationErrorMessages = new ArrayList<ValidationErrorMessage>();
+			ValidationErrorMessage errorMessage = ErrorMessageGenerator
+					.generateErrorMessage(
+							catchingMessageEventsWithoutIncomingFlow,
+							validationRule);
+
+			validationErrorMessages.add(errorMessage);
+			return Optional.of(validationErrorMessages);
 		} else {
-			return Optional.of(ErrorMessageGenerator.generateErrorMessage(
-					erroneousNodes, validationRule));
+			return Optional.empty();
 		}
+
+	}
+
+	@Override
+	public Optional<ValidationErrorMessage> validateWorkflowProcess(
+			WorkflowProcess workflowProcess) {
+		return Optional.empty();
 	}
 
 	/**
 	 * 
+	 * @param events
+	 * @return
+	 */
+	private List<Node> searchCatchingEvents(List<Node> events) {
+		return events.stream()
+				.filter(event -> ((Event) event).getCatchThrow().isPresent())
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * 
+	 * @param workFlowProcesses
+	 * @return
+	 */
+	private List<Node> getCatchingMessageEvents(
+			List<WorkflowProcess> workFlowProcesses) {
+		List<Node> catchingMessageEvents = workFlowProcesses
+				.stream()
+				.map(workflowProcess -> searchCatchingEvents(workflowProcess
+						.getEvents().get()))
+				.flatMap(catchingEventsWP -> catchingEventsWP.stream())
+				.collect(Collectors.toList());
+		return catchingMessageEvents;
+	}
+
+	/**
+	 * 
+	 * @param catchingEvents
 	 * @param transitions
 	 * @return
 	 */
-	private List<Node> getCatchingEventMessageWithoutIncomingMessage(
-			List<Transition> transitions) {
-
-		List<Transition> transitionsToCatchingMessageEvents = transitions
+	private List<Node> getCatchingEventsWithoutIncomingFlow(
+			List<Node> catchingEvents, List<Transition> transitions) {
+		return catchingEvents
 				.stream()
-				.filter(transition -> isAMessageEvent(transition.getFrom())
-						&& !((Event) transition.getTo()).getCatchThrow()
-								.isPresent()).collect(Collectors.toList());
-
-		List<Node> erroneousNodes = transitionsToCatchingMessageEvents.stream()
-				.map(transition -> transition.getFrom())
-				.filter(event -> !isAMessageEvent(event))
+				.map(catchingEvent -> getCatchingEventWithoutIncomingFlow(
+						(Event) catchingEvent, transitions))
+				.filter(catchingEvent -> catchingEvent.isPresent())
+				.map(catchingEvent -> catchingEvent.get())
 				.collect(Collectors.toList());
-
-		return erroneousNodes;
 	}
 
 	/**
 	 * 
-	 * @param node
+	 * @param catchingEvent
+	 * @param transitions
 	 * @return
 	 */
-	private boolean isAMessageEvent(Node node) {
-		return node.getType().equals(NodeType.EVENT)
-				&& ((Event) node).getGeneralType().equals(
-						EventGeneralType.IntermediateEvent)
-				&& ((Event) node).getSpecificType().equals(
-						EventSpecificType.Message);
-	}
+	private Optional<Event> getCatchingEventWithoutIncomingFlow(
+			Event catchingEvent, List<Transition> transitions) {
+		List<Transition> catchingTransitions = transitions
+				.stream()
+				.filter(messageFlow -> messageFlow.getTo().getId()
+						.equals(catchingEvent.getId()))
+				.collect(Collectors.toList());
 
+		if (catchingTransitions.size() > 0) {
+			return Optional.empty();
+		} else {
+			return Optional.of(catchingEvent);
+		}
+	}
 }

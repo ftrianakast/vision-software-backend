@@ -135,6 +135,12 @@ public class EventParser {
 		Optional<String> catchthrow = Optional.of(triggerResultMessageNode
 				.getAttribute("CatchThrow"));
 
+		System.out.println("------------------------");
+		System.out.println(catchthrow);
+		Element el = (Element) eventElement.getParentNode().getParentNode();
+		System.out.println(el.getAttribute("Name"));
+		System.out.println("------------------------");
+
 		Event event = new Event(id, name, "", eventType,
 				Optional.of(eventSpecificType), catchthrow);
 		return event;

@@ -1,6 +1,7 @@
 package co.com.vision.prueba.domain;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * 
@@ -10,7 +11,7 @@ import java.util.List;
 public class Process {
 	private List<WorkflowProcess> workFlowProcesses;
 
-	private List<Transition> messageFlows;
+	private Optional<List<Transition>> messageFlows;
 
 	/**
 	 * Default Constructor
@@ -18,7 +19,7 @@ public class Process {
 	 * @param messageFlows
 	 */
 	public Process(List<WorkflowProcess> workFlowProcesses,
-			List<Transition> messageFlows) {
+			Optional<List<Transition>> messageFlows) {
 		super();
 		this.workFlowProcesses = workFlowProcesses;
 		this.messageFlows = messageFlows;
@@ -33,11 +34,11 @@ public class Process {
 		this.workFlowProcesses = workFlowProcesses;
 	}
 
-	public List<Transition> getMessageFlows() {
+	public Optional<List<Transition>> getMessageFlows() {
 		return messageFlows;
 	}
 
-	public void setMessageFlows(List<Transition> messageFlows) {
+	public void setMessageFlows(Optional<List<Transition>> messageFlows) {
 		this.messageFlows = messageFlows;
 	}
 }

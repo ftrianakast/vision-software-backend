@@ -30,7 +30,8 @@ public class RuleValidator_Style_115 implements RuleValidator {
 		Optional<List<Node>> events = process.getEvents();
 
 		if (events.isPresent()) {
-			List<Node> eventsNotLabeled = getIntermediateEventsNotLabeled(events.get());
+			List<Node> eventsNotLabeled = getIntermediateEventsNotLabeled(events
+					.get());
 
 			if (eventsNotLabeled.size() == 0) {
 				return Optional.empty();
@@ -41,7 +42,6 @@ public class RuleValidator_Style_115 implements RuleValidator {
 		} else {
 			return Optional.empty();
 		}
-
 	}
 
 	/**
@@ -55,6 +55,11 @@ public class RuleValidator_Style_115 implements RuleValidator {
 						&& ((Event) event).getGeneralType().equals(
 								EventGeneralType.IntermediateEvent))
 				.collect(Collectors.toList());
+
+		eventsNotLabeled.stream()
+				.forEach(
+						event -> System.out.println("The event with: "
+								+ event.getId() + " is not labeled"));
 
 		return eventsNotLabeled;
 	}

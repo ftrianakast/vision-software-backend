@@ -27,7 +27,7 @@ public class ProcessParserImpl implements ProcessParser {
 					.get());
 			NodeList messageFlowsNodeList = xmlDocument.get()
 					.getElementsByTagName("MessageFlow");
-			List<Transition> transitions = MessageFlowParser.parseMessageFlows(
+			Optional<List<Transition>> transitions = MessageFlowParser.parseMessageFlows(
 					messageFlowsNodeList, workflowProcesses);
 			return Optional.of(new Process(workflowProcesses, transitions));
 		} else {
