@@ -36,15 +36,31 @@ public class RuleValidator_BPMN_102 implements RuleValidator {
 	 */
 	public Optional<ValidationErrorMessage> validateWorkflowProcess(
 			WorkflowProcess process) {
-		List<Node> events = process.getEvents();
-		List<Node> activities = process.getActivities();
+		Optional<List<Node>> events = process.getEvents();
+		Optional<List<Node>> activities = process.getActivities();
+		if (events.isPresent() && activities.isPresent()) {
+			return validateProcessWithEventsAndActivities(events.get(),
+					activities.get(), process.getTransitions());
+		} else {
+			return Optional.empty();
+		}
+	}
 
-		if (includesProcessStartOrEndEvents(process.getEvents())) {
+	/**
+	 * 
+	 * @param events
+	 * @param activities
+	 * @param transitions
+	 * @return
+	 */
+	private Optional<ValidationErrorMessage> validateProcessWithEventsAndActivities(
+			List<Node> events, List<Node> activities,
+			List<Transition> transitions) {
+		if (includesProcessStartOrEndEvents(events)) {
 			List<Node> candidateEvents = excludeEventByEventType(events,
 					EventGeneralType.EndEvent);
 			List<Node> candidateActivities = excludeActivitiesByActivityType(
 					activities, ActivityType.COMPENSATING_ACTIVITY);
-			List<Transition> transitions = process.getTransitions();
 
 			List<Node> erroneousActivities = getNodesWithoutOutgoingFlow(
 					candidateActivities, transitions);
@@ -58,7 +74,6 @@ public class RuleValidator_BPMN_102 implements RuleValidator {
 		} else {
 			return Optional.empty();
 		}
-
 	}
 
 	/**
@@ -66,7 +81,7 @@ public class RuleValidator_BPMN_102 implements RuleValidator {
 	 * @param events
 	 * @return
 	 */
-	public boolean includesProcessStartOrEndEvents(List<Node> events) {
+	private boolean includesProcessStartOrEndEvents(List<Node> events) {
 		boolean includesStartEventCondition = events.stream().anyMatch(
 				event -> ((Event) event).getGeneralType().equals(
 						EventGeneralType.StartEvent));
@@ -101,7 +116,7 @@ public class RuleValidator_BPMN_102 implements RuleValidator {
 			EventGeneralType evenType) {
 		List<Node> candidateEvents = events
 				.stream()
-				.filter(event -> ((Event) event).getGeneralType().equals(
+				.filter(event -> !((Event) event).getGeneralType().equals(
 						evenType)).collect(Collectors.toList());
 
 		return candidateEvents;
@@ -128,10 +143,10 @@ public class RuleValidator_BPMN_102 implements RuleValidator {
 	 */
 	private boolean hasNodeOutgoingTransition(Node node,
 			List<Transition> transitions) {
-		return transitions.stream()
+		boolean response = transitions.stream()
 				.anyMatch(
 						transition -> transition.getFrom().getId()
 								.equals(node.getId()));
-
+		return response;
 	}
 }

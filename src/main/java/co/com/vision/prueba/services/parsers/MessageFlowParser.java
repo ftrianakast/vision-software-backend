@@ -24,7 +24,6 @@ public class MessageFlowParser {
 		for (int i = 0; i < messageFlowsNodes.getLength(); i++) {
 			org.w3c.dom.Node messageFlowNode = messageFlowsNodes.item(i);
 			Element nodeElement = (Element) messageFlowNode;
-
 			Node sourceNode = findNodeInWorkFlowProcesses(
 					nodeElement.getAttribute("Source"), workflowProcesses);
 			Node targetNode = findNodeInWorkFlowProcesses(
@@ -45,8 +44,11 @@ public class MessageFlowParser {
 	 */
 	private static Node findNodeInWorkFlowProcesses(String id,
 			List<WorkflowProcess> workflowProcesses) {
-		return workflowProcesses.stream()
-				.map(workFlowProcess -> workFlowProcess.getNodes())
+		return workflowProcesses
+				.stream()
+				.filter(workflowProcess -> workflowProcess.getNodes()
+						.isPresent())
+				.map(workFlowProcess -> workFlowProcess.getNodes().get())
 				.flatMap((workFlowProcessList) -> workFlowProcessList.stream())
 				.filter(node -> node.getId().equals(id)).findFirst().get();
 	}

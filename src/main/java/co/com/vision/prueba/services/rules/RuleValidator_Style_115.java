@@ -27,15 +27,21 @@ public class RuleValidator_Style_115 implements RuleValidator {
 	@Override
 	public Optional<ValidationErrorMessage> validateWorkflowProcess(
 			WorkflowProcess process) {
-		List<Node> events = process.getEvents();
-		List<Node> eventsNotLabeled = getIntermediateEventsNotLabeled(events);
+		Optional<List<Node>> events = process.getEvents();
 
-		if (eventsNotLabeled.size() == 0) {
-			return Optional.empty();
+		if (events.isPresent()) {
+			List<Node> eventsNotLabeled = getIntermediateEventsNotLabeled(events.get());
+
+			if (eventsNotLabeled.size() == 0) {
+				return Optional.empty();
+			} else {
+				return Optional.of(ErrorMessageGenerator.generateErrorMessage(
+						eventsNotLabeled, validationRule));
+			}
 		} else {
-			return Optional.of(ErrorMessageGenerator.generateErrorMessage(
-					eventsNotLabeled, validationRule));
+			return Optional.empty();
 		}
+
 	}
 
 	/**

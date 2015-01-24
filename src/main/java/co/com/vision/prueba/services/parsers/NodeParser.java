@@ -14,6 +14,9 @@ import co.com.vision.prueba.domain.activity.Activity;
 
 public class NodeParser {
 
+	private static String EVENT = "Event";
+	private static String IMPLEMENTATION = "Implementation";
+
 	/**
 	 * Parse all the nodes (activities and nodes)
 	 * 
@@ -32,11 +35,15 @@ public class NodeParser {
 			String nodeId = nodeElement.getAttribute("Id");
 			String nodeName = nodeElement.getAttribute("Name");
 
-			if (nodeElement.hasAttribute("Event")) {
+			NodeList eventNodes = nodeElement.getElementsByTagName(EVENT);
+			NodeList implementationNodes = nodeElement
+					.getElementsByTagName(IMPLEMENTATION);
+
+			if (eventNodes.getLength() > 0) {
 				events.add((co.com.vision.prueba.domain.Node) EventParser
 						.parseEvent(nodeElement, nodeId, nodeName));
 				nodes.put(NodeType.EVENT, events);
-			} else if (nodeElement.hasAttribute("Implementation")) {
+			} else if (implementationNodes.getLength() > 0) {
 				Activity activity = new Activity(nodeId, nodeName, "",
 						Optional.empty());
 				activities.add((co.com.vision.prueba.domain.Node) activity);

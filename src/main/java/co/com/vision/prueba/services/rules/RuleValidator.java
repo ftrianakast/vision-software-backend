@@ -8,6 +8,11 @@ import co.com.vision.prueba.domain.Process;
 import co.com.vision.prueba.domain.WorkflowProcess;
 import co.com.vision.prueba.domain.aux.ValidationErrorMessage;
 
+/**
+ * 
+ * @author Felipe Triana<ftrianakast@gmail.com>
+ *
+ */
 public interface RuleValidator {
 
 	/**

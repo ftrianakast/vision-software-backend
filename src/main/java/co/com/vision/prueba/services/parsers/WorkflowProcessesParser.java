@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
 import co.com.vision.prueba.domain.NodeType;
 import co.com.vision.prueba.domain.Transition;
 import co.com.vision.prueba.domain.WorkflowProcess;
+import co.com.vision.prueba.utils.ListTools;
 
 /**
  * 
@@ -20,7 +21,12 @@ import co.com.vision.prueba.domain.WorkflowProcess;
  * @version 1.0
  */
 public class WorkflowProcessesParser {
+
 	private static String WORKFLOW_PROCESS = "WorkflowProcess";
+	private static String ACTIVITIES = "Activities";
+	private static String ACTIVITY = "Activity";
+	private static String TRANSITIONS = "Transitions";
+	private static String TRANSITION = "Transition";
 
 	/**
 	 * 
@@ -51,28 +57,49 @@ public class WorkflowProcessesParser {
 			Element workProcessElement = (Element) workProcessNode;
 			String processId = workProcessElement.getAttribute("Id");
 			String processName = workProcessElement.getAttribute("Name");
-			NodeList domainNodes = workProcessElement
-					.getElementsByTagName("Activity");
-			NodeList transitions = workProcessElement
-					.getElementsByTagName("Transition");
 
-			HashMap<NodeType, List<co.com.vision.prueba.domain.Node>> nodes = NodeParser
-					.parseNodes(domainNodes);
+			Element activitiesParent = (Element) workProcessElement
+					.getElementsByTagName(ACTIVITIES).item(0);
+			Element transitionsParent = (Element) workProcessElement
+					.getElementsByTagName(TRANSITIONS).item(0);
 
-			List<co.com.vision.prueba.domain.Node> activities = nodes
-					.get(NodeType.ACTIVITY);
-			List<co.com.vision.prueba.domain.Node> events = nodes
-					.get(NodeType.EVENT);
-			activities.addAll(events);
+			NodeList domainNodes = activitiesParent
+					.getElementsByTagName(ACTIVITY);
 
-			List<Transition> realTransitions = TransitionParser
-					.parseTransitions(transitions, activities);
+			NodeList transitions = transitionsParent
+					.getElementsByTagName(TRANSITION);
+
+			if (domainNodes.getLength() > 0) {
+				HashMap<NodeType, List<co.com.vision.prueba.domain.Node>> nodes = NodeParser
+						.parseNodes(domainNodes);
+
+				List<co.com.vision.prueba.domain.Node> activities = nodes
+						.get(NodeType.ACTIVITY);
+				List<co.com.vision.prueba.domain.Node> events = nodes
+						.get(NodeType.EVENT);
+
+				List<Transition> realTransitions = TransitionParser
+						.parseTransitions(transitions,
+								ListTools.joinLists(activities, events));
+
+				nodes.get(NodeType.ACTIVITY)
+						.stream()
+						.forEach(
+								activity -> System.out.println(activity
+										.getName()));
+
+				workflowProcess.setActivities(Optional.of(nodes
+						.get(NodeType.ACTIVITY)));
+				workflowProcess
+						.setEvents(Optional.of(nodes.get(NodeType.EVENT)));
+				workflowProcess.setTransitions(realTransitions);
+			} else {
+				workflowProcess.setActivities(Optional.empty());
+				workflowProcess.setEvents(Optional.empty());
+			}
 
 			workflowProcess.setId(processId);
 			workflowProcess.setName(processName);
-			workflowProcess.setActivities(nodes.get(NodeType.ACTIVITY));
-			workflowProcess.setEvents(nodes.get(NodeType.EVENT));
-			workflowProcess.setTransitions(realTransitions);
 			workflowProcesses.add(workflowProcess);
 		}
 		return workflowProcesses;

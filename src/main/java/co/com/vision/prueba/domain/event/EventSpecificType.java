@@ -1,5 +1,9 @@
 package co.com.vision.prueba.domain.event;
 
 public enum EventSpecificType {
-	Message
+	Message {
+		public String toString() {
+			return "Message";
+		}
+	}
 }

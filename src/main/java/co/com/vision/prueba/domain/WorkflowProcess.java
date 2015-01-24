@@ -1,6 +1,9 @@
 package co.com.vision.prueba.domain;
 
 import java.util.List;
+import java.util.Optional;
+
+import co.com.vision.prueba.utils.ListTools;
 
 /**
  * 
@@ -15,9 +18,9 @@ public class WorkflowProcess {
 
 	private String description;
 
-	private List<Node> activities;
+	private Optional<List<Node>> activities;
 
-	private List<Node> events;
+	private Optional<List<Node>> events;
 
 	private List<Transition> transitions;
 
@@ -40,7 +43,7 @@ public class WorkflowProcess {
 	 * @param countryKey
 	 */
 	public WorkflowProcess(String id, String name, String description,
-			List<Node> activities, List<Node> events,
+			Optional<List<Node>> activities, Optional<List<Node>> events,
 			List<Transition> transitions, String author, String version,
 			String countryKey) {
 		super();
@@ -56,19 +59,19 @@ public class WorkflowProcess {
 	}
 
 	public WorkflowProcess() {
-
 	}
 
 	/**
 	 * 
 	 * @return
 	 */
-	public List<Node> getNodes() {
-		List<Node> oldActivities = getActivities();
-		getActivities().addAll(getEvents());
-		List<Node> completeNodes = getActivities();
-		setActivities(oldActivities);
-		return completeNodes;
+	public Optional<List<Node>> getNodes() {
+		if (this.getActivities().isPresent() && this.getEvents().isPresent()) {
+			return Optional.of(ListTools.joinLists(this.getActivities().get(), this
+					.getEvents().get()));
+		} else {
+			return Optional.empty();
+		}
 	}
 
 	public String getName() {
@@ -87,11 +90,11 @@ public class WorkflowProcess {
 		this.description = description;
 	}
 
-	public List<Node> getActivities() {
+	public Optional<List<Node>> getActivities() {
 		return activities;
 	}
 
-	public void setActivities(List<Node> activities) {
+	public void setActivities(Optional<List<Node>> activities) {
 		this.activities = activities;
 	}
 
@@ -127,11 +130,11 @@ public class WorkflowProcess {
 		this.countryKey = countryKey;
 	}
 
-	public List<Node> getEvents() {
+	public Optional<List<Node>> getEvents() {
 		return events;
 	}
 
-	public void setEvents(List<Node> events) {
+	public void setEvents(Optional<List<Node>> events) {
 		this.events = events;
 	}
 

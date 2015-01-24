@@ -25,19 +25,22 @@ public class RuleValidator_Style_104 implements RuleValidator {
 			"Style_0104",
 			"Two activities in the same process should not have the same name.");
 
-
-	
 	@Override
-	public Optional<ValidationErrorMessage> validateWorkflowProcess(WorkflowProcess process) {
-		List<Node> activities = process.getActivities();
-		List<Node> repeatedActivities = findRepeatedNamedActivities(activities);
-
-		if (repeatedActivities.size() == 0) {
-			return Optional.empty();
+	public Optional<ValidationErrorMessage> validateWorkflowProcess(
+			WorkflowProcess process) {
+		Optional<List<Node>> activities = process.getActivities();
+		if (activities.isPresent()) {
+			List<Node> repeatedActivities = findRepeatedNamedActivities(activities.get());
+			if (repeatedActivities.size() == 0) {
+				return Optional.empty();
+			} else {
+				return Optional.of(ErrorMessageGenerator.generateErrorMessage(
+						repeatedActivities, validationRule));
+			}
 		} else {
-			return Optional.of(ErrorMessageGenerator.generateErrorMessage(
-					repeatedActivities, validationRule));
+			return Optional.empty();
 		}
+
 	}
 
 	/**
@@ -63,7 +66,5 @@ public class RuleValidator_Style_104 implements RuleValidator {
 		}
 		return repeatedActivities;
 	}
-
-	
 
 }
