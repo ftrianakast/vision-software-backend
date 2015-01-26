@@ -2,6 +2,8 @@ package co.com.vision.prueba.domain.rules;
 
 import java.util.Optional;
 
+import javax.ejb.Stateless;
+
 import co.com.vision.prueba.utils.Constants;
 
 /**
@@ -10,6 +12,7 @@ import co.com.vision.prueba.utils.Constants;
  * @author Felipe Triana <ftriankast@gmail.com>
  * @version 1.0
  */
+@Stateless
 public class RuleFactory {
 
 	/**

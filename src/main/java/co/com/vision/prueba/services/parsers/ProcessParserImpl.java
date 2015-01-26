@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import javax.ejb.LocalBean;
+import javax.ejb.Stateless;
+
 import org.w3c.dom.Document;
 import org.w3c.dom.NodeList;
 
@@ -16,12 +19,21 @@ import co.com.vision.prueba.domain.WorkflowProcess;
  * @author Felipe Triana<frianakast@gmail.com>
  * @version 1.0
  */
+@Stateless
+@LocalBean
 public class ProcessParserImpl implements ProcessParser {
+
+	/**
+	 * Default constructor
+	 */
+	public ProcessParserImpl() {
+	}
+
 	@Override
 	public Process parseProcess(Document xmlDocument) {
 		List<WorkflowProcess> workflowProcesses = parseWorkflowProcesses(xmlDocument);
-		NodeList messageFlowsNodeList = xmlDocument.getElementsByTagName(
-				"MessageFlow");
+		NodeList messageFlowsNodeList = xmlDocument
+				.getElementsByTagName("MessageFlow");
 		Optional<List<Transition>> transitions = MessageFlowParser
 				.parseMessageFlows(messageFlowsNodeList, workflowProcesses);
 		return new Process(workflowProcesses, transitions);

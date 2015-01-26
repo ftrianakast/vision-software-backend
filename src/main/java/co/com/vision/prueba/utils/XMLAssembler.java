@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.util.Optional;
 
 import javax.ejb.Stateless;
@@ -13,6 +14,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 /**
@@ -46,16 +48,19 @@ public class XMLAssembler {
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(is));
 			String line = null;
-			while((line = in.readLine()) != null) {
-			  System.out.println(line);
+			String document = "";
+			while ((line = in.readLine()) != null) {
+				if (line.startsWith("<") || line.startsWith(" ")) {
+					document += line;
+				}
 			}
 			DocumentBuilderFactory factory = DocumentBuilderFactory
 					.newInstance();
-			DocumentBuilder parser;
-			parser = factory.newDocumentBuilder();
-			Document dc = parser.parse(is);
-			return Optional.of(dc);
-		} catch (ParserConfigurationException | SAXException | IOException e) {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document doc = builder.parse(new InputSource(new StringReader(
+					document)));
+			return Optional.of(doc);
+		} catch (IOException | SAXException | ParserConfigurationException e) {
 			e.printStackTrace();
 			return Optional.empty();
 		}

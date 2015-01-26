@@ -17,6 +17,7 @@ import org.junit.runner.RunWith;
 
 import co.com.vision.prueba.domain.Process;
 import co.com.vision.prueba.domain.aux.ValidationErrorMessage;
+import co.com.vision.prueba.domain.rules.Rule_BPMN_102;
 import co.com.vision.prueba.services.parsers.ProcessParser;
 import co.com.vision.prueba.services.parsers.ProcessParserImpl;
 import co.com.vision.prueba.services.parsers.utils.ProcessObtainer;
@@ -36,7 +37,7 @@ public class RuleValidator_BPMN_102_Test {
 	ProcessObtainer processObtainer;
 	
 	@Inject
-	RuleValidator_BPMN_102 ruleValidator;
+	Rule_BPMN_102 ruleValidator;
 
 	
 	static final String processPath = "./src/test/resources/BPMN/Sample_2.xpdl";
@@ -44,7 +45,7 @@ public class RuleValidator_BPMN_102_Test {
 	@Deployment
 	public static Archive<?> createTestArchive() {
 		return ShrinkWrap.create(WebArchive.class, "test.war").addClasses(
-				RuleValidator.class, RuleValidator_BPMN_102.class,
+				RuleValidator.class, Rule_BPMN_102.class,
 				ProcessParser.class, ProcessParserImpl.class, ProcessObtainer.class);
 	}
 
