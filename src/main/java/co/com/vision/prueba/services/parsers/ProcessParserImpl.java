@@ -10,7 +10,6 @@ import org.w3c.dom.NodeList;
 import co.com.vision.prueba.domain.Process;
 import co.com.vision.prueba.domain.Transition;
 import co.com.vision.prueba.domain.WorkflowProcess;
-import co.com.vision.prueba.utils.XMLAssembler;
 
 /**
  * 
@@ -19,20 +18,13 @@ import co.com.vision.prueba.utils.XMLAssembler;
  */
 public class ProcessParserImpl implements ProcessParser {
 	@Override
-	public Optional<Process> parseProcess(byte[] document) {
-		Optional<Document> xmlDocument = XMLAssembler
-				.getReadXMLObject(document);
-		if (xmlDocument.isPresent()) {
-			List<WorkflowProcess> workflowProcesses = parseWorkflowProcesses(xmlDocument
-					.get());
-			NodeList messageFlowsNodeList = xmlDocument.get()
-					.getElementsByTagName("MessageFlow");
-			Optional<List<Transition>> transitions = MessageFlowParser.parseMessageFlows(
-					messageFlowsNodeList, workflowProcesses);
-			return Optional.of(new Process(workflowProcesses, transitions));
-		} else {
-			return Optional.empty();
-		}
+	public Process parseProcess(Document xmlDocument) {
+		List<WorkflowProcess> workflowProcesses = parseWorkflowProcesses(xmlDocument);
+		NodeList messageFlowsNodeList = xmlDocument.getElementsByTagName(
+				"MessageFlow");
+		Optional<List<Transition>> transitions = MessageFlowParser
+				.parseMessageFlows(messageFlowsNodeList, workflowProcesses);
+		return new Process(workflowProcesses, transitions);
 	}
 
 	/**

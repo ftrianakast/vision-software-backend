@@ -28,6 +28,7 @@ import co.com.vision.prueba.domain.WorkflowProcess;
 import co.com.vision.prueba.domain.activity.Activity;
 import co.com.vision.prueba.domain.event.Event;
 import co.com.vision.prueba.services.parsers.utils.FileAssembler;
+import co.com.vision.prueba.services.parsers.utils.ProcessObtainer;
 import co.com.vision.prueba.utils.XMLAssembler;
 
 /**
@@ -58,15 +59,11 @@ public class ProcessParserTest extends TestCase {
 
 	@Test
 	public void parseProcessSample1() throws Exception {
-		Path samplePath = Paths.get("./src/test/resources/BPMN/Sample_4.xpdl");
-		Optional<byte[]> bytesFile = FileAssembler.getBytesFile(samplePath);
-		Optional<Process> process = bytesFile
-				.flatMap(processParser::parseProcess);
-		if (process.isPresent()) {
-			testWorkflowProcess(process.get());
-		} else {
-			throw new Exception("There was an error parsing the file");
-		}
+		ProcessObtainer processObtainer = new ProcessObtainer();
+
+		Process process = processObtainer
+				.getProcessFromPathFile("./src/test/resources/BPMN/Sample_4.xpdl");
+		testWorkflowProcess(process);
 	}
 
 	/**
@@ -83,7 +80,8 @@ public class ProcessParserTest extends TestCase {
 		Assert.assertEquals("Main Process", workflowProcess01.getName());
 		Assert.assertEquals("P4", workflowProcess02.getName());
 		Assert.assertEquals("P5", workflowProcess03.getName());
-		Assert.assertEquals(true, testMessageFlows(process.getMessageFlows().get()));
+		Assert.assertEquals(true, testMessageFlows(process.getMessageFlows()
+				.get()));
 		Assert.assertEquals(true, testActivity(workflowProcess03
 				.getActivities().get()));
 		Assert.assertEquals(true, testEvents(workflowProcess02.getEvents()

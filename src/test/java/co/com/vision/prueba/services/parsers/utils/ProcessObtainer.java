@@ -8,6 +8,7 @@ import javax.inject.Inject;
 
 import co.com.vision.prueba.domain.Process;
 import co.com.vision.prueba.services.parsers.ProcessParserImpl;
+import co.com.vision.prueba.utils.XMLAssembler;
 
 /**
  * 
@@ -17,24 +18,20 @@ import co.com.vision.prueba.services.parsers.ProcessParserImpl;
 public class ProcessObtainer {
 
 	@Inject
-	ProcessParserImpl processParser;
-	
+	static ProcessParserImpl processParser;
+
 	/**
 	 * 
 	 * @param processPath
 	 * @return
 	 * @throws Exception
 	 */
-	public Process getProcessFromPathFile(String processPath) throws Exception {
+	public Process getProcessFromPathFile(String processPath)
+			throws Exception {
 		Path samplePath = Paths.get(processPath);
 		Optional<byte[]> bytesFile = FileAssembler.getBytesFile(samplePath);
-
-		Optional<Process> process = bytesFile
-				.flatMap(processParser::parseProcess);
-		if (process.isPresent()) {
-			return process.get();
-		} else {
-			throw new Exception("There was an error parsing the file");
-		}
+		Process process = processParser.parseProcess(XMLAssembler
+				.getReadXMLObject(bytesFile.get()).get());
+		return process;
 	}
 }

@@ -1,6 +1,6 @@
 package co.com.vision.prueba.services.parsers;
 
-import java.util.Optional;
+import org.w3c.dom.Document;
 
 import co.com.vision.prueba.domain.Process;
 
@@ -15,5 +15,5 @@ public interface ProcessParser {
 	 * @param document
 	 * @return
 	 */
-	public Optional<Process> parseProcess(byte[] document);
+	public Process parseProcess(Document xml);
 }

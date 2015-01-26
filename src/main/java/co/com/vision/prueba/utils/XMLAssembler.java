@@ -1,7 +1,10 @@
 package co.com.vision.prueba.utils;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Optional;
 
 import javax.ejb.Stateless;
@@ -33,7 +36,31 @@ public class XMLAssembler {
 			return Optional.empty();
 		}
 	}
-	
+
+	/**
+	 * 
+	 * @param is
+	 * @return
+	 */
+	public static Optional<Document> getXMLFromInputStream(InputStream is) {
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(is));
+			String line = null;
+			while((line = in.readLine()) != null) {
+			  System.out.println(line);
+			}
+			DocumentBuilderFactory factory = DocumentBuilderFactory
+					.newInstance();
+			DocumentBuilder parser;
+			parser = factory.newDocumentBuilder();
+			Document dc = parser.parse(is);
+			return Optional.of(dc);
+		} catch (ParserConfigurationException | SAXException | IOException e) {
+			e.printStackTrace();
+			return Optional.empty();
+		}
+	}
+
 	/**
 	 * 
 	 * @param document
@@ -47,7 +74,8 @@ public class XMLAssembler {
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 		factory.setNamespaceAware(true);
 		DocumentBuilder builder = factory.newDocumentBuilder();
-		Document realDocument = builder.parse(new ByteArrayInputStream(document));
+		Document realDocument = builder
+				.parse(new ByteArrayInputStream(document));
 		return realDocument;
 	}
 }
