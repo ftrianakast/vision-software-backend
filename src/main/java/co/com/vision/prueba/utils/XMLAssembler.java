@@ -31,7 +31,7 @@ public class XMLAssembler {
 	 * @return
 	 * @throws Exception
 	 */
-	public static Optional<Document> getReadXMLObject(byte[] document) {
+	public Optional<Document> getReadXMLObject(byte[] document) {
 		try {
 			return Optional.of(getXMLObjectRepresentation(document));
 		} catch (ParserConfigurationException | SAXException | IOException e) {
@@ -45,6 +45,7 @@ public class XMLAssembler {
 	 * @return
 	 */
 	public static Optional<Document> getXMLFromInputStream(InputStream is) {
+		System.out.println("entre");
 		try {
 			BufferedReader in = new BufferedReader(new InputStreamReader(is));
 			String line = null;

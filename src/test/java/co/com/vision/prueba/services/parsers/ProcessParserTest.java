@@ -1,25 +1,14 @@
 package co.com.vision.prueba.services.parsers;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
-import javax.inject.Inject;
 
 import junit.framework.Assert;
 import junit.framework.TestCase;
 
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import co.com.vision.prueba.domain.Node;
 import co.com.vision.prueba.domain.Process;
@@ -27,7 +16,6 @@ import co.com.vision.prueba.domain.Transition;
 import co.com.vision.prueba.domain.WorkflowProcess;
 import co.com.vision.prueba.domain.activity.Activity;
 import co.com.vision.prueba.domain.event.Event;
-import co.com.vision.prueba.services.parsers.utils.FileAssembler;
 import co.com.vision.prueba.services.parsers.utils.ProcessObtainer;
 import co.com.vision.prueba.utils.XMLAssembler;
 
@@ -36,41 +24,40 @@ import co.com.vision.prueba.utils.XMLAssembler;
  * @author ftrianakast
  *
  */
-@RunWith(Arquillian.class)
 public class ProcessParserTest extends TestCase {
 
-	@Deployment
-	public static Archive<?> createTestArchive() {
-		return ShrinkWrap.create(WebArchive.class, "test.war").addClasses(
-				ProcessParser.class, ProcessParserImpl.class,
-				XMLAssembler.class);
-	}
+	/**
+	 * Specific process parser
+	 */
+	ProcessParserImpl processParser = new ProcessParserImpl();
 
-	@Inject
-	ProcessParserImpl processParser;
+	/**
+	 * XML Assembler
+	 */
+	XMLAssembler xmlAssembler = new XMLAssembler();
 
-	@Inject
-	XMLAssembler xmlAssembler;
-
+	/**
+	 * Activities allowed
+	 */
 	static final List<String> activityNamesAllowed = Arrays.asList("A", "C",
 			"A1", "C1");
 
+	/**
+	 * Node sinvolved
+	 */
 	Map<String, String> nodesInolvedInMessageFlow = new HashMap<String, String>();
-
-	@Test
-	public void parseProcessSample1() throws Exception {
-		ProcessObtainer processObtainer = new ProcessObtainer();
-
-		Process process = processObtainer
-				.getProcessFromPathFile("./src/test/resources/BPMN/Sample_4.xpdl");
-		testWorkflowProcess(process);
-	}
 
 	/**
 	 * 
 	 * @param process
+	 * @throws Exception
 	 */
-	private void testWorkflowProcess(Process process) {
+	@Test
+	public void testProcess() throws Exception {
+		ProcessObtainer processObtainer = new ProcessObtainer();
+		Process process = processObtainer
+				.getProcessFromPathFile("./src/test/resources/BPMN/Sample_4.xpdl");
+
 		WorkflowProcess workflowProcess01 = process.getWorkFlowProcesses().get(
 				0);
 		WorkflowProcess workflowProcess02 = process.getWorkFlowProcesses().get(
@@ -125,7 +112,6 @@ public class ProcessParserTest extends TestCase {
 	 * @param list
 	 */
 	private boolean testEvents(List<Node> events) {
-		System.out.println("------------------------------------------------");
 		events.stream().forEach(event -> System.out.println(event.getName()));
 		Event eventB = (Event) events.stream()
 				.filter(event -> event.getName().equals("B")).findFirst().get();

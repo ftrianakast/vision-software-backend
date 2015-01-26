@@ -3,45 +3,30 @@ package co.com.vision.prueba.services.rules;
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
-
 import junit.framework.Assert;
 
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import co.com.vision.prueba.domain.Process;
 import co.com.vision.prueba.domain.aux.ValidationErrorMessage;
 import co.com.vision.prueba.domain.rules.Rule_Style_104;
-import co.com.vision.prueba.services.parsers.ProcessParser;
 import co.com.vision.prueba.services.parsers.ProcessParserImpl;
 import co.com.vision.prueba.services.parsers.utils.ProcessObtainer;
 
-@RunWith(Arquillian.class)
+/**
+ * Test the rule STYLE_104
+ * @author Felipe Triana<ftrianakast@gmail.com>
+ *
+ */
 public class RuleValidator_Style_104_Test {
-	@Inject
-	ProcessParserImpl processParser;
+	
+	ProcessParserImpl processParser = new ProcessParserImpl();
 
-	@Inject
-	ProcessObtainer processObtainer;
+	ProcessObtainer processObtainer = new ProcessObtainer();
 
-	@Inject
-	Rule_Style_104 ruleValidator;
+	Rule_Style_104 ruleValidator = new Rule_Style_104();
 
 	static final String processPath = "./src/test/resources/BPMN/Sample_3.xpdl";
-
-	@Deployment
-	public static Archive<?> createTestArchive() {
-		return ShrinkWrap.create(WebArchive.class, "test.war").addClasses(
-				RuleValidator.class, Rule_Style_104.class,
-				ProcessParser.class, ProcessParserImpl.class,
-				ProcessObtainer.class);
-	}
 
 	@Test
 	public void testRule() {

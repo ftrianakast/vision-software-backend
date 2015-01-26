@@ -3,51 +3,32 @@ package co.com.vision.prueba.services.rules;
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
-
 import junit.framework.Assert;
 
-import org.jboss.arquillian.container.test.api.Deployment;
-import org.jboss.arquillian.junit.Arquillian;
-import org.jboss.shrinkwrap.api.Archive;
-import org.jboss.shrinkwrap.api.ShrinkWrap;
-import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import co.com.vision.prueba.domain.Process;
 import co.com.vision.prueba.domain.aux.ValidationErrorMessage;
 import co.com.vision.prueba.domain.rules.Rule_BPMN_102;
-import co.com.vision.prueba.services.parsers.ProcessParser;
 import co.com.vision.prueba.services.parsers.ProcessParserImpl;
 import co.com.vision.prueba.services.parsers.utils.ProcessObtainer;
 
 /**
- * 
+ * Test for validation of rule BPMN_102
  * @author Felipe Triana
  *
  */
-@RunWith(Arquillian.class)
 public class RuleValidator_BPMN_102_Test {
 
-	@Inject
-	ProcessParserImpl processParser;
+	ProcessParserImpl processParser = new ProcessParserImpl();
 
-	@Inject
-	ProcessObtainer processObtainer;
+	ProcessObtainer processObtainer = new ProcessObtainer();
 	
-	@Inject
-	Rule_BPMN_102 ruleValidator;
+	Rule_BPMN_102 ruleValidator = new Rule_BPMN_102();
 
 	
 	static final String processPath = "./src/test/resources/BPMN/Sample_2.xpdl";
 
-	@Deployment
-	public static Archive<?> createTestArchive() {
-		return ShrinkWrap.create(WebArchive.class, "test.war").addClasses(
-				RuleValidator.class, Rule_BPMN_102.class,
-				ProcessParser.class, ProcessParserImpl.class, ProcessObtainer.class);
-	}
 
 	@Test
 	public void testRule() {

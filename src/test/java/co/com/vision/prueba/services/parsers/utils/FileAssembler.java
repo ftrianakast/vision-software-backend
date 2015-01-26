@@ -5,8 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
 
-import javax.ejb.Stateless;
-
 public class FileAssembler {
 	/**
 	 * @param path

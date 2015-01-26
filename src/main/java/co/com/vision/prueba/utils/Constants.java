@@ -7,7 +7,7 @@ public class Constants {
 
 	public static String RULE_SUCCESSFUL_VALIDATION_MESSAGE = "Your process is valid for this rule";
 
-	public static String BPMN_102 = "STYLE_102";
+	public static String BPMN_102 = "BPMN_102";
 
 	public static String STYLE_104 = "STYLE_104";
 
