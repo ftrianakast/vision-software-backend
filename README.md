@@ -28,15 +28,15 @@ Sin embargo si quiere probarlo en un servidor local, aquí encuentra [el war de 
 
 Si bien la aplicación valida reglas; hay tres sabores para validar estas reglas:
 
-1. __POST__ http://54.200.93.241:8080:8080/validation/rules/all:
+-  __POST__ http://54.200.93.241:8080:8080/validation/rules/all:
 
 Se prueban todas las reglas existentes para el proceso __XML__ suministrado
 
-2. __POST__ http://54.200.93.241:8080/validation/rules?names=STYLE_115,STYLE_122
+- __POST__ http://54.200.93.241:8080/validation/rules?names=STYLE_115,STYLE_122
 
 Se prueban las reglas indicadas en el __Query Parameter__ names. Se deben separar por comas como está en el ejemplo.
 
-3. __POST__ http://54.200.93.241:8080/validation/rules/{ruleName}
+- __POST__ http://54.200.93.241:8080/validation/rules/{ruleName}
 
 Se prueban la regla indicada sobre el proceso.
 
@@ -55,7 +55,7 @@ STYLE_123 | A throwing Message event should have outgoing message flow
 
 Para consumir los servicios REST utilice [__Advanced REST Client__][2] siguiendo los ejemplos que se indican a continuación:
 
-## 1. __POST__ http://54.200.93.241:8080:8080/validation/rules/all: 
+1. __POST__ http://54.200.93.241:8080:8080/validation/rules/all: 
 
 Para consumir todas las reglas abra el [__Advanced REST__][2] en Chrome. Luego tendrá que hacer algo como esto:
 
@@ -118,14 +118,14 @@ Usted obtendrá un JSON indicando los errores teniendo en cuenta todas las regla
     }]
 
 
-## 2. __POST__ http://54.200.93.241:8080:8080/validation/rules?names=STYLE_122,STYLE_123: 
+2. __POST__ http://54.200.93.241:8080:8080/validation/rules?names=STYLE_122,STYLE_123: 
 
 Este servicio valida las reglas indicadas en names. En el caso del ejemplo se validan las reglas STYLE_122 y STYLE_123. Este seguro de utilizar los nombres indicados con anterioridad.
 
 ![Some][6]
 
 
-## 3. __POST__ http://54.200.93.241:8080:8080/validation/rules/BPMN_102
+3. __POST__ http://54.200.93.241:8080:8080/validation/rules/BPMN_102
 
 Este servicio valida la regla indicada en el Path Param de la URL. En este caso se valida la regla __BPMN_102__. Reemplazarla a conveniencia.
 
